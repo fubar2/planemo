@@ -2,7 +2,10 @@
 import os
 import string
 
-from galaxy.tool_util.deps.commands import shell
+from galaxy.tool_util.deps.commands import (
+    shell,
+    shell_process
+)
 from six.moves import shlex_quote
 
 from planemo.io import info, shell_join
@@ -119,9 +122,23 @@ def run_galaxy_command(ctx, command, env, action):
     ctx.vlog("run command exited with return code %s" % exit_code)
     return exit_code
 
+def run_galaxy_command_nowait(ctx, command, env, action):
+    """Run Galaxy command with informative verbose logging."""
+    message = "%s with command [%s]" % (action, command)
+    # info not working in pytest+Github actions the way it did in nose?
+    info(message)
+    ctx.vlog("With environment variables:")
+    ctx.vlog("============================")
+    for key, value in env.items():
+        ctx.vlog('%s="%s"' % (key, value))
+    ctx.vlog("============================")
+    p = shell_process(command, env=env)
+    return p
+
 
 __all__ = (
     "setup_venv",
     "run_galaxy_command",
+    "run_galaxy_command_nowait",
     "setup_common_startup_args",
 )

@@ -758,8 +758,10 @@ class BaseGalaxyConfig(GalaxyInterface):
         wait_on(ready, "galaxy tool installation", timeout=DEFAULT_TOOL_INSTALL_TIMEOUT)
 
     def install_workflows(self):
+        print('#### config install_workflows called with runnables = {self.runnables}')
         for runnable in self.runnables:
             if runnable.type.name in ["galaxy_workflow", "cwl_workflow"] and not runnable.is_remote_workflow_uri:
+                print(f"runnable workflow being installed = {runnable} ")
                 self._install_workflow(runnable)
 
     def _install_workflow(self, runnable):

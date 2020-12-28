@@ -28,8 +28,10 @@ def cli(ctx, **kwds):
     workflow isn't working - not sure how to get it loaded - planemo tries to load it as a tool :(
     """
     mod_dir = os.path.dirname(__file__)
-    tf_dir = os.path.join(mod_dir, '..', '..', 'planemo_ext', 'tool_factory_2')
-    tf_dir = os.path.abspath(tf_dir)
-    runnables = for_paths([tf_dir])
+    tf_dir = [os.path.join(mod_dir, '..', '..', 'planemo_ext', 'tool_factory_2'),]
+    # tf_dir.append(os.path.join(mod_dir, '..', '..', 'planemo_ext', 'TFhistory_planemo.tar.gz'))
+    tf_dir.append(os.path.join(mod_dir, '..', '..', 'planemo_ext', 'TFdemo_wf_planemo.ga'))
+    runnables = for_paths(tf_dir)
     print(f"## tf_dir = {tf_dir}, runnables={runnables}")
+    kwds['serve_return_popen'] = True
     galaxy_serve(ctx, runnables, **kwds)
